@@ -223,7 +223,9 @@ impl ForgePlugin for TestgenPlugin {
 
         let (info, written) = generate(&dir, matches.get_flag("force"))?;
 
-        print!("{}", format_report(&info, &written));
+        if !ctx.quiet {
+            print!("{}", format_report(&info, &written));
+        }
         Ok(())
     }
 }
