@@ -152,6 +152,20 @@ fn default_author(ctx: &ForgeContext) -> String {
         .unwrap_or_else(|| "Your Name".to_string())
 }
 
+/// Render the successful project creation report.
+pub fn format_created_report(name: &str, template: &str, dest: &Path) -> String {
+    format!(
+        "created `{name}` from template `{template}` at {}\n\n\
+         next steps:\n\
+           cd {name}\n\
+           cargo test                      # run the template's unit tests\n\
+           stellar contract build          # build the deployable wasm\n\
+           soroban-forge test-init         # add a generated test harness\n\
+           soroban-forge ci-init           # add GitHub Actions workflows\n",
+        dest.display()
+    )
+}
+
 /// The `new` subcommand.
 pub struct ScaffoldPlugin;
 
@@ -242,17 +256,7 @@ impl ForgePlugin for ScaffoldPlugin {
             matches.get_flag("force"),
         )?;
 
-        println!(
-            "created `{name}` from template `{template}` at {}",
-            dest.display()
-        );
-        println!();
-        println!("next steps:");
-        println!("  cd {name}");
-        println!("  cargo test                      # run the template's unit tests");
-        println!("  stellar contract build          # build the deployable wasm");
-        println!("  soroban-forge test-init         # add a generated test harness");
-        println!("  soroban-forge ci-init           # add GitHub Actions workflows");
+        print!("{}", format_created_report(name, &template, &dest));
         Ok(())
     }
 }
