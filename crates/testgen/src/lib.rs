@@ -268,6 +268,13 @@ mod tests {
     }
 
     #[test]
+    fn report_explains_constructor_follow_up() {
+        let report = format_report(&contract_info(true, true), &[]);
+        assert!(report.contains("DemoContract` has a __constructor"));
+        assert!(report.contains("#[ignore]d"));
+    }
+
+    #[test]
     fn generates_harness_for_hello_world_output() {
         let tmp = tempfile::tempdir().unwrap();
         let dir = tmp.path().join("demo");
