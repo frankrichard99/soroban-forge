@@ -270,6 +270,12 @@ mod tests {
     }
 
     #[test]
+    fn template_list_report_has_heading_and_items() {
+        let report = format_template_list(&["hello-world", "token"]);
+        assert_eq!(report, "available templates:\n  hello-world\n  token\n");
+    }
+
+    #[test]
     fn validates_project_names() {
         assert!(validate_project_name("my-project").is_ok());
         assert!(validate_project_name("a1_b2").is_ok());
