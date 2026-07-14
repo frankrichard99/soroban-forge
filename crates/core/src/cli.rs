@@ -116,6 +116,14 @@ mod tests {
     }
 
     #[test]
+    fn help_lists_quiet_flag() {
+        let (plugins, _) = dummy();
+        let help = build_command(&plugins).render_long_help().to_string();
+        assert!(help.contains("--quiet"));
+        assert!(help.contains("Suppress informational command output"));
+    }
+
+    #[test]
     fn version_is_workspace_version() {
         let (plugins, _) = dummy();
         let cmd = build_command(&plugins);
