@@ -146,4 +146,13 @@ mod tests {
         let result = build_command(&plugins).try_get_matches_from(["soroban-forge", "nonexistent"]);
         assert!(result.is_err());
     }
+
+    #[test]
+    fn quiet_is_global_after_subcommand() {
+        let (plugins, _) = dummy();
+        let matches = build_command(&plugins)
+            .try_get_matches_from(["soroban-forge", "dummy", "--flag", "--quiet"])
+            .unwrap();
+        assert!(matches.get_flag("quiet"));
+    }
 }
