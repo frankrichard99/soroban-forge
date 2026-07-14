@@ -67,4 +67,12 @@ mod tests {
         let ctx = ForgeContext::new(dir.path().to_path_buf(), false).unwrap();
         assert!(!ctx.quiet);
     }
+
+
+    #[test]
+    fn context_accepts_explicit_quiet_mode() {
+        let dir = tempfile::tempdir().unwrap();
+        let ctx = ForgeContext::with_output(dir.path().to_path_buf(), false, true).unwrap();
+        assert!(ctx.quiet);
+    }
 }
