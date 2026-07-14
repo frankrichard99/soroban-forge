@@ -18,6 +18,8 @@ pub struct ForgeContext {
     pub config: Option<ForgeConfig>,
     /// Whether `--verbose` was passed.
     pub verbose: bool,
+    /// Whether informational command output should be suppressed.
+    pub quiet: bool,
 }
 
 impl ForgeContext {
@@ -28,6 +30,7 @@ impl ForgeContext {
             cwd,
             config,
             verbose,
+            quiet: false,
         })
     }
 }
