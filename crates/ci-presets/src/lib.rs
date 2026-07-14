@@ -125,6 +125,20 @@ pub fn generate(
     Ok(written)
 }
 
+/// Render the report for generated CI workflows.
+pub fn format_report(provider: &str, name: &str, written: &[&str], deploy: bool) -> String {
+    let mut out = format!("wrote {provider} workflows for `{name}`:\n");
+    for path in written {
+        out.push_str(&format!("  {path}\n"));
+    }
+    if deploy {
+        out.push_str("\nthe deploy workflow needs a GitHub secret named STELLAR_DEPLOYER_SECRET\n");
+        out.push_str("(a funded testnet account's secret key). Add it under:\n");
+        out.push_str("  repo → Settings → Secrets and variables → Actions\n");
+    }
+    out
+}
+
 /// The `ci-init` subcommand.
 pub struct CiPresetsPlugin;
 
@@ -172,16 +186,7 @@ impl ForgePlugin for CiPresetsPlugin {
 
         let written = generate(&dir, provider, &name, deploy, matches.get_flag("force"))?;
 
-        println!("wrote {provider} workflows for `{name}`:");
-        for path in written {
-            println!("  {path}");
-        }
-        if deploy {
-            println!();
-            println!("the deploy workflow needs a GitHub secret named STELLAR_DEPLOYER_SECRET");
-            println!("(a funded testnet account's secret key). Add it under:");
-            println!("  repo → Settings → Secrets and variables → Actions");
-        }
+        print!("{}", format_report(provider, &name, &written, deploy));
         Ok(())
     }
 }
